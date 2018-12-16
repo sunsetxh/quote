@@ -1,9 +1,35 @@
 import xlrd
+import xlwt
 import tkinter.filedialog
 import tkinter.messagebox
 import os
 from tkinter import *
 import product
+
+'''
+设置单元格样式
+'''
+
+
+def set_style(name, height, bold=False):
+    style = xlwt.XFStyle()  # 初始化样式
+
+    font = xlwt.Font()  # 为样式创建字体
+    font.name = name  # 'Times New Roman'
+    font.bold = bold
+    font.color_index = 4
+    font.height = height
+
+    # borders= xlwt.Borders()
+    # borders.left= 6
+    # borders.right= 6
+    # borders.top= 6
+    # borders.bottom= 6
+
+    style.font = font
+    # style.borders = borders
+
+    return style
 
 
 def readworkbppk(path):
@@ -18,6 +44,10 @@ def readworkbppk(path):
             prod = product.Product(row)
             prod.printprice()
             products.append(prod)
+
+
+def writeworkbook(path):
+    print(path)
 
 
 def browser():
@@ -46,15 +76,3 @@ runbtn = Button(master, text='生成报价', command=run)
 runbtn.grid(row=1, column=1, sticky=W + E + N + S)  # 添加按钮，位于第二行居中
 
 master.mainloop()  # 开启主循环
-
-# w = xlrd.open_workbook('PCB清单价格修改表.xls')
-# s = w.get_sheets()[0]
-# list = []
-#
-# products = []
-#
-# 循环行数
-# for i in range(2, len(s)):
-#     for j in range(0, len()):  # 循环列数
-#         list.append(w.read(x, y))  # 读取每一列的值
-#     products.append(product(list))
