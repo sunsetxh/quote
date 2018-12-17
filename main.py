@@ -7,11 +7,8 @@ import os
 from tkinter import *
 import product
 
-'''
-设置单元格样式
-'''
 
-
+# 设置单元格样式
 def set_style(name, height, bold=False):
     style = xlwt.XFStyle()  # 初始化样式
 
