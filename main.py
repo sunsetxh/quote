@@ -43,24 +43,24 @@ def readworkbppk(path):
         row = table.row_values(i)  # 获取该行内容为列表
         if isinstance(row[0], float) or isinstance(row[0], int):  # 判断第一个元素是否为编号
             prod = product.Product(row)
-            prod.printprice()
+            # prod.printprice()
             products.append(prod)
     return products
 
 
 def writeworkbook(products, oldpath, path=None):
-    if path is None:
+    if path is None:  # 生成文件名
         lst = oldpath.split('.')
         path = lst[0] + '-已报价.' + lst[1]
     rdwb = xlrd.open_workbook(oldpath)
     rds = rdwb.sheet_by_index(0)
-    wtwb = copy.copy(rdwb)
+    wtwb = copy.copy(rdwb)  # 将旧表复制到新表
     wts = wtwb.get_sheet(0)
     nrows = rds.nrows
     i = 0
     length = len(products)
     for r in range(nrows):
-        if rds.cell(r, 0).value == products[i].coding:
+        if rds.cell(r, 0).value == products[i].coding:  # 判断料号
             wts.write(r, 15, products[i].UnitPrice)
             wts.write(r, 16, products[i].TotalPrice)
             wts.write(r, 17, products[i].DiscountPrice)
@@ -87,8 +87,19 @@ def run():
         writeworkbook(products, pathEntry.get())
 
 
+def center_window(master, w, h):
+    # 获取屏幕 宽、高
+    ws = master.winfo_screenwidth()
+    hs = master.winfo_screenheight()
+    # 计算 x, y 位置
+    x = (ws / 2) - (w / 2)
+    y = (hs / 2) - (h / 2)
+    master.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+
 master = Tk()
 master.title('报价')  # 更改窗口标题
+center_window(master, 450, 70)
 Label(master, text='文件路径').grid(row=0)  # 添加标签
 pathEntry = Entry(master, width=50)
 pathEntry.grid(row=0, column=1)  # 添加文本框
