@@ -1,5 +1,6 @@
 import xlrd
 import xlwt
+from xlutils import copy
 import tkinter.filedialog
 import tkinter.messagebox
 import os
@@ -34,20 +35,41 @@ def set_style(name, height, bold=False):
 
 def readworkbppk(path):
     wk = xlrd.open_workbook(path)  # 读取文件
-    table = wk.sheets()[0]  # 获取第一张表格
+    table = wk.sheet_by_index(0)  # 获取第一张表格
     nrows = table.nrows  # 获取总行数
     ncols = table.ncols  # 获取总列数
     products = []
-    for i in range(1, nrows):  # 循环所有行
+    for i in range(nrows):  # 循环所有行
         row = table.row_values(i)  # 获取该行内容为列表
         if isinstance(row[0], float) or isinstance(row[0], int):  # 判断第一个元素是否为编号
             prod = product.Product(row)
             prod.printprice()
             products.append(prod)
+    return products
 
 
-def writeworkbook(path):
-    print(path)
+def writeworkbook(products, oldpath, path=None):
+    if path is None:
+        lst = oldpath.split('.')
+        path = lst[0] + '-已报价.' + lst[1]
+    rdwb = xlrd.open_workbook(oldpath)
+    rds = rdwb.sheet_by_index(0)
+    wtwb = copy.copy(rdwb)
+    wts = wtwb.get_sheet(0)
+    nrows = rds.nrows
+    i = 0
+    length = len(products)
+    for r in range(nrows):
+        if rds.cell(r, 0).value == products[i].coding:
+            wts.write(r, 15, products[i].UnitPrice)
+            wts.write(r, 16, products[i].TotalPrice)
+            wts.write(r, 17, products[i].DiscountPrice)
+            i += 1
+            if i == length:
+                break
+    wtwb.save(path)
+
+    tkinter.messagebox.showinfo('通知', '报价已经生成至：' + path)
 
 
 def browser():
@@ -61,8 +83,8 @@ def run():
     if len(pathEntry.get()) == 0:  # 判断文本框内是否有内容
         tkinter.messagebox.showwarning('警告', '请先选择文件')
     else:
-        readworkbppk(pathEntry.get())  # 读取产品信息文件
-        tkinter.messagebox.showinfo('通知', '报价已经生成')
+        products = readworkbppk(pathEntry.get())  # 读取产品信息文件
+        writeworkbook(products, pathEntry.get())
 
 
 master = Tk()

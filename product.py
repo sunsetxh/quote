@@ -49,21 +49,21 @@ class Product:
         self.number = row[10]
         # 单价
         self.UnitPrice = 0
+        addprice = 0  # 每平米需要的额外费用
+        if self.thickness > 1.6:  # 板厚大于1.6增加80/m2
+            addprice += 80
+        if self.CopperThickness > 1:  # 铜厚大于1增加80/m2
+            addprice += 80
         if self.pnumber == 2:
-            self.UnitPrice = self.length * self.width * 480
+            self.UnitPrice = self.length * self.width * (480 + addprice)
         elif self.pnumber == 4:
-            self.UnitPrice = self.length * self.width * 1000
-        print(self.UnitPrice)
-        if self.thickness > 1.6:
-            self.UnitPrice += 80
-        if self.CopperThickness > 1:
-            self.UnitPrice += 80
-        self.UnitPrice = self.UnitPrice
+            self.UnitPrice = self.length * self.width * (1000 + addprice)
+        # print(self.UnitPrice)
         if self.UnitPrice < 0.3:
             self.UnitPrice = 0.3
         # 总面积
         self.area = self.length * self.width * self.number
-        print(self.area)
+        # print(self.area)
         if 20 < self.area <= 50:
             self.discount = 0.95
         elif self.area > 50:
