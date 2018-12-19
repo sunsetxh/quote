@@ -1,3 +1,4 @@
+# coding:utf-8
 import xlrd
 import xlwt
 from xlutils import copy
@@ -30,7 +31,7 @@ def set_style(name, height, bold=False):
     return style
 
 
-def readworkbppk(path):
+def readworkbook(path):
     wk = xlrd.open_workbook(path)  # 读取文件
     table = wk.sheet_by_index(0)  # 获取第一张表格
     nrows = table.nrows  # 获取总行数
@@ -80,7 +81,7 @@ def run():
     if len(pathEntry.get()) == 0:  # 判断文本框内是否有内容
         tkinter.messagebox.showwarning('警告', '请先选择文件')
     else:
-        products = readworkbppk(pathEntry.get())  # 读取产品信息文件
+        products = readworkbook(pathEntry.get())  # 读取产品信息文件
         writeworkbook(products, pathEntry.get())
 
 
