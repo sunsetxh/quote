@@ -58,7 +58,7 @@ def writeworkbook(products, oldpath, path=None):
     i = 0
     length = len(products)
     for r in range(nrows):
-        if rds.cell(r, 0).value == products[i].coding:  # 判断料号
+        if rds.cell(r, 0).value == products[i].coding:  # 判断编码
             wts.write(r, 15, products[i].UnitPrice)
             wts.write(r, 16, products[i].TotalPrice)
             wts.write(r, 17, products[i].DiscountPrice)

@@ -14,9 +14,9 @@ class Product:
             self.pnumber = 4
         else:
             self.pnumber = -1
-        # 长（mm）
+        # 长（m）
         self.length = row[4] / 1000
-        # 宽（mm）
+        # 宽（m）
         self.width = row[5] / 1000
         # 板厚（mm）
         self.thickness = float(row[6][0:2])
